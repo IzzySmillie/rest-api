@@ -40,8 +40,27 @@ async function getUser(req, res) {
 }
 
 // Delete user by Id
-function deleteUser(req, res) {
-  console.log('Deleting User')
+async function deleteUser(req, res) {
+  const { id } = req.params
+  let auth = req.headers.authorization
+
+  if (!auth) {
+    return res.status(401).send({ message: 'Not Authorized' })
+  }
+
+  auth = auth.split(' ')[1]
+
+  const buff = Buffer.from(auth, 'base64')
+  const creds = buff.toString('utf-8')
+  const username = creds.split(':')[0]
+  const secretkey = creds.split(':')[1]
+
+  if (username != apiUserName && secretkey != apiSecretkey) {
+    return res.status(401).send({ message: 'Not Authorized' })
+  }
+
+  const user = await UserModel.findByIdAndDelete(id)
+  res.status(200).send({ message: 'User deleted successfully', user })
 }
 
 module.exports = { getUsers, postUser, getUser, deleteUser }
