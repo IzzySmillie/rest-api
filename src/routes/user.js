@@ -28,8 +28,15 @@ async function postUser(req, res) {
 }
 
 // Get specific user by Id
-function getUser(req, res) {
-  console.log('Get user by Id')
+async function getUser(req, res) {
+  const { id } = req.params
+
+  try {
+    const user = await UserModel.findById(id)
+    res.status(200).send(user)
+  } catch (err) {
+    res.status(400).send(err)
+  }
 }
 
 // Delete user by Id

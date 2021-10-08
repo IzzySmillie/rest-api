@@ -25,7 +25,31 @@ describe('Users', () => {
           done()
         })
     })
+    it('it should GET user by given id', (done) => {
+      let user = new UserModel({
+        username: 'Dana Scully',
+        email: 'd@scully.com',
+        password: 'mulder is mad',
+      })
+      user.save((err, user) => {
+        chai
+          .request(server)
+          .get('/user/' + user.id)
+          .send(user)
+          .end((err, res) => {
+            res.should.have.status(200)
+            res.body.should.be.a('object')
+            res.body.should.have.property('username')
+            res.body.should.have.property('email')
+            res.body.should.have.property('password')
+            res.body.should.have.property('created')
+            res.body.should.have.property('_id').eql(user.id)
+            done()
+          })
+      })
+    })
   })
+
   describe('/POST user', () => {
     it('it should create a new user', (done) => {
       let user = {
