@@ -5,20 +5,19 @@ const { apiUserName, apiSecretkey } = require('../config')
 function getUsers(req, res) {
   const userQuery = UserModel.find({})
 
-  userQuery.exec((err, user) => {
+  userQuery.exec((err, users) => {
     if (err) {
       return res.status(400).send(err)
     }
 
-    res.status(200).send(user)
+    res.send(users)
   })
 }
 
 // Create new user
 async function postUser(req, res) {
-  console.log(req.body)
   const newuser = await new UserModel(req.body)
-
+  // TODO hash password & validate email pre save
   newuser.save((err, user) => {
     if (err) {
       return res.status(400).send(err)
