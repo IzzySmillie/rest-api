@@ -15,7 +15,7 @@ mongoose
 
 app.use(express.urlencoded({ extended: true }))
 
-app.route('/users').get(userRoute.getUsers).post(userRoute.postuser)
+app.route('/users').get(userRoute.getUsers).post(userRoute.postUser)
 app.route('/user/:id').get(userRoute.getUser).delete(userRoute.deleteUser)
 
 app.listen(port, () => {
