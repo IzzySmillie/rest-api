@@ -52,7 +52,64 @@ describe('Users', () => {
   })
 
   describe('/POST user', () => {
-    it('it should create a new user', (done) => {
+    it('it should NOT CREATE a new user without a username', (done) => {
+      let user = {
+        email: 'fox@mulder.com',
+        password: 'aliens',
+      }
+      chai
+        .request(server)
+        .post('/users')
+        .type('form')
+        .send(user)
+        .end((err, res) => {
+          res.should.have.status(400)
+          res.should.be.a('object')
+          res.body.should.have.property('errors')
+          res.body.errors.should.have.property('username')
+          res.body.errors.username.should.have.property('kind').eql('required')
+          done()
+        })
+    })
+    it('it should NOT CREATE a new user without an email', (done) => {
+      let user = {
+        username: 'Fox Mulder',
+        password: 'aliens',
+      }
+      chai
+        .request(server)
+        .post('/users')
+        .type('form')
+        .send(user)
+        .end((err, res) => {
+          res.should.have.status(400)
+          res.should.be.a('object')
+          res.body.should.have.property('errors')
+          res.body.errors.should.have.property('email')
+          res.body.errors.email.should.have.property('kind').eql('required')
+          done()
+        })
+    })
+    it('it should NOT CREATE a new user without a password', (done) => {
+      let user = {
+        username: 'Fox Mulder',
+        email: 'fox@mulder.com',
+      }
+      chai
+        .request(server)
+        .post('/users')
+        .type('form')
+        .send(user)
+        .end((err, res) => {
+          res.should.have.status(400)
+          res.should.be.a('object')
+          res.body.should.have.property('errors')
+          res.body.errors.should.have.property('password')
+          res.body.errors.password.should.have.property('kind').eql('required')
+          done()
+        })
+    })
+    it('it should CREATE a new user', (done) => {
       let user = {
         username: 'Fox Mulder',
         email: 'fox@mulder.com',
