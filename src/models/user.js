@@ -13,6 +13,7 @@ const UserSchema = new Schema({
     required: true,
     unique: true,
     trim: true,
+    validate: [validateEmail, 'Please enter a valid email address'],
   },
   password: {
     type: String,
@@ -32,5 +33,12 @@ UserSchema.pre('save', async function (next) {
   this.password = await bcrypt.hash(this.password, 10)
   next()
 })
+
+function validateEmail(email) {
+  const regexCheck =
+    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+
+  return regexCheck.test(String(email).toLowerCase())
+}
 
 module.exports = mongoose.model('User', UserSchema)
