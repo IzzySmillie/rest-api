@@ -17,7 +17,7 @@ function getUsers(req, res) {
 // Create new user
 async function postUser(req, res) {
   const newuser = await new UserModel(req.body)
-  // TODO hash password & validate email pre save
+
   newuser.save((err, user) => {
     if (err) {
       return res.status(400).send(err)
