@@ -10,7 +10,7 @@ function getUsers(req, res) {
       return res.status(400).send(err)
     }
 
-    res.send(users)
+    res.json(users)
   })
 }
 
@@ -22,7 +22,7 @@ async function postUser(req, res) {
     if (err) {
       return res.status(400).send(err)
     } else {
-      res.status(200).send({ message: 'User added successfully', user })
+      res.status(200).json({ message: 'User added successfully', user })
     }
   })
 }
@@ -33,9 +33,9 @@ async function getUser(req, res) {
 
   try {
     const user = await UserModel.findById(id)
-    res.status(200).send(user)
+    res.status(200).json(user)
   } catch (err) {
-    res.status(400).send(err)
+    res.status(400).json(err)
   }
 }
 
@@ -45,7 +45,7 @@ async function deleteUser(req, res) {
   let auth = req.headers.authorization
 
   if (!auth) {
-    return res.status(401).send({ message: 'Not Authorized' })
+    return res.status(401).json({ message: 'Not Authorized' })
   }
 
   auth = auth.split(' ')[1]
@@ -55,12 +55,12 @@ async function deleteUser(req, res) {
   const username = creds.split(':')[0]
   const secretkey = creds.split(':')[1]
 
-  if (username != apiUserName && secretkey != apiSecretkey) {
-    return res.status(401).send({ message: 'Not Authorized' })
+  if (username !== apiUserName && secretkey !== apiSecretkey) {
+    return res.status(401).json({ message: 'Not Authorized' })
   }
 
   const user = await UserModel.findByIdAndDelete(id)
-  res.status(200).send({ message: 'User deleted successfully', user })
+  res.status(200).json({ message: 'User deleted successfully', user })
 }
 
 module.exports = { getUsers, postUser, getUser, deleteUser }

@@ -13,6 +13,7 @@ describe('Users', () => {
       done()
     })
   })
+
   describe('/GET users', () => {
     it('it should GET all the users', (done) => {
       chai
